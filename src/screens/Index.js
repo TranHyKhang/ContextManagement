@@ -1,19 +1,24 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import Header from '../components/Header';
+import FlatlistItem from '../components/FlatlistItem';
+import {Context as TodoContext} from '../contexts/TodoContext'
 
-export default function Index() {
+export default function Index({navigation}) {
+    const {state} = useContext(TodoContext);
+    console.log(state)
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Todo App</Text>
-            </View>
+            <Header/>
             <View style={styles.body}>
-
+                {
+                    state.map(item => <FlatlistItem item={item} navigation={navigation}/>)
+                }
             </View>
             <View style={styles.footer}>
-                <TouchableOpacity>
-                    <Icon style={{color: 'white',left:2}} name="add" size={70}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Create')}>
+                    <Icon style={{color: 'black',left:2}} name='add' size={70}/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -25,17 +30,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    },
-    header: {
-        alignItems: 'center',
-        backgroundColor: 'rgb(0,250, 255)',
-        flex: 1,
-        justifyContent: 'center'
-    },
-    headerTitle: {
-        fontSize: 32,
-        color: 'white',
-        fontWeight: 'bold'
     },
     body: {
         flex: 8,
@@ -49,7 +43,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginRight: 30,
         marginBottom: 30,
-        borderWidth: 0.2,
-        borderColor: "black",
+        borderWidth: 1.5,
+        borderColor: "rgba(0,0,0,0.1)",
     }
 })
