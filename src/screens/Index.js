@@ -1,13 +1,20 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import FlatlistItem from '../components/FlatlistItem';
 import {Context as TodoContext} from '../contexts/TodoContext'
+import jsonServer from '../api/jsonServer';
+import axios from 'axios'
 
 export default function Index({navigation}) {
-    const {state} = useContext(TodoContext);
-    console.log(state)
+    const {state, getList} = useContext(TodoContext);
+    // console.log(state)
+
+    useEffect(() => {
+        getList();
+    },[])
+
     return (
         <View style={styles.container}>
             <Header/>

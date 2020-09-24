@@ -1,13 +1,12 @@
 import CreateDataContext from './CreateDataContext';
+import jsonServer from '../api/jsonServer'
 
 const TodoReducer =  (state, action) => {
     switch(action.type) {
-        case 'add_item': 
-            const newItem = {
-                id: Math.floor(Math.random() * 1000),
-                title: action.payload.title
-            }
-            return [...state, newItem];
+        case 'get_data':
+            return action.payload
+        case 'add_item':
+            return [...state, action.payload];
         case 'remove_item':
             return state.filter(item => item.id !== action.payload);
         case 'edit_item':
@@ -17,8 +16,19 @@ const TodoReducer =  (state, action) => {
     }
 }
 
+const getList = (dispatch) => {
+    return async () => {
+        const res = await jsonServer.get('/posts');
+        dispatch({
+            type: 'get_data',
+            payload: res.data
+        })
+    }
+}
+
 const addTodo = (dispatch) => {
-    return (title, callback) => {
+    return async (title, callback) => {
+        await jsonServer.post('/posts', {title})
         dispatch({
             type: 'add_item',
             payload: {title}
@@ -30,7 +40,8 @@ const addTodo = (dispatch) => {
 }
 
 const removeTodo = (dispatch) => {
-    return (id) => {
+    return async (id) => {
+        await jsonServer.delete('/posts/' + id);
         dispatch({
             type: 'remove_item',
             payload: id
@@ -52,21 +63,6 @@ const editTodo = (dispatch) => {
 
 export const {Context, Provider} = CreateDataContext(
     TodoReducer,
-    {addTodo, removeTodo, editTodo},
-    [{
-        id: 10,
-        title: 'Hy Khang'
-    },
-    {
-        id: 1,
-        title: 'Khang Hy'
-    },
-    {
-        id: 2,
-        title: 'Hy Hy'
-    },
-    {
-        id: 3,
-        title: 'Khang Khang'
-    }]
+    {addTodo, removeTodo, editTodo, getList},
+    []
 )
