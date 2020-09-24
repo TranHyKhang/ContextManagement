@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import {Context as TodoContext} from '../contexts/TodoContext';
 
 export default function CreateList({navigation}) {
-    const {addTodo} = useContext(TodoContext);
+    const {addTodo, getList} = useContext(TodoContext);
     const [title, setTitle] = useState('')
     return (
         <View style={styles.container}>

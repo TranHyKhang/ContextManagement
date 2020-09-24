@@ -13,6 +13,10 @@ export default function Index({navigation}) {
 
     useEffect(() => {
         getList();
+        const listner = navigation.addListener('focus', () => {
+            getList();
+        })
+        return listner;
     },[])
 
     return (

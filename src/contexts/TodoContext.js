@@ -50,7 +50,8 @@ const removeTodo = (dispatch) => {
 }
 
 const editTodo = (dispatch) => {
-    return (id, title, callback) => {
+    return async (id, title, callback) => {
+        await jsonServer.put('/posts/' + id, {title});
         dispatch({
             type: 'edit_item',
             payload: {id, title}
